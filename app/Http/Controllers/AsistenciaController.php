@@ -39,7 +39,7 @@ class AsistenciaController extends Controller
         Asistencia::create([
             'horario_id' => $request->horario_id,
             'estado'     => $request->estado,
-            'fecha'      => now()->toDateString()
+            'fecha_hora' => now()->toDateTimeString()
         ]);
 
         registrar_bitacora(

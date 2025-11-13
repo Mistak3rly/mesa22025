@@ -76,7 +76,7 @@
                         <p class="text-sm text-gray-500 dark:text-gray-400">
                             Clase seleccionada: <span id="asistencia-titulo" class="font-medium"></span>
                         </p>
-                        <form id="form-asistencia" method="POST" action="{{ route('asistencias.create') }}">
+                        <form id="form-asistencia" action="{{ route('asistencias.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="horario_id" id="asistencia-horario-id">
 

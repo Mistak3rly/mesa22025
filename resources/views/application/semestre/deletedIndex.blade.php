@@ -1,6 +1,6 @@
 <x-layouts.app :title="__('Lista de grupos eliminados')">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-4 space-y-4">
-        <form action="{{ route('grupos.index') }}" method="GET">
+        <form action="{{ route('semestres.index') }}" method="GET">
             @csrf
             <button type="submit"class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Regresar
@@ -17,7 +17,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">ID</th>
-                    <th scope="col" class="px-6 py-3">Grupo</th>
+                    <th scope="col" class="px-6 py-3">Semestre</th>
                     <th scope="col" class="px-6 py-3">Acciones</th>
                 </tr>
             </thead>

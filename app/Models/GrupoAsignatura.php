@@ -33,6 +33,11 @@ class GrupoAsignatura extends Model
         return $this->belongsTo(Asignatura::class);
     }
 
+    public function docente()
+    {
+        return $this->belongsTo(Docente::class);
+    }
+
 }
 
 

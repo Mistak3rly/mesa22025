@@ -3,6 +3,7 @@
 use App\Http\Controllers\AsistenciaController;
 use App\Http\Controllers\HoraController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\SemestreController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -111,5 +112,18 @@ Route::middleware(['auth'])->group( function () {
 
     //Rutas para modulo asistencias
     Route::resource('asistencias', AsistenciaController::class);
+
+    // Rutas para la seccion reportes
+    // Reportes de docentes
+    Route::get('/reportes/docentes/excel', [ReporteController::class, 'docentesExcel'])->name('reportes.docentes.excel');
+    Route::get('/reportes/docentes/pdf', [ReporteController::class, 'docentesPdf'])->name('reportes.docentes.pdf');
+
+    // Reportes de materias
+    Route::get('/reportes/materias/excel', [ReporteController::class, 'materiasExcel'])->name('reportes.materias.excel');
+    Route::get('/reportes/materias/pdf', [ReporteController::class, 'materiasPdf'])->name('reportes.materias.pdf');
+
+    // Reportes dinámicos
+    Route::get('/reportes/dinamicos', [ReporteController::class, 'dinamicos'])->name('reportes.dinamicos');
+    Route::resource('reportes', ReporteController::class);
 
 });

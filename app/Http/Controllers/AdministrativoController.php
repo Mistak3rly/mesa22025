@@ -165,7 +165,7 @@ class AdministrativoController extends Controller
 
         // uso de la bitacora
         registrar_bitacora(
-            "Se creó un nuevo docente: {$administrativo->codigo}"
+            "Se actualizo el administrador con codigo : {$administrativo->codigo}"
         );
 
         return view(
