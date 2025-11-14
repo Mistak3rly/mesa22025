@@ -22,3 +22,83 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+# Botón de Volver - Documentación
+
+## Ubicación del Botón Principal
+
+El botón de volver atrás se encuentra en la **barra de navegación superior** (navbar) de todas las páginas que usan el layout `app.blade.php`.
+
+### Archivo: `resources/views/components/layouts/app/nav.blade.php`
+
+El botón está ubicado en la parte superior izquierda, junto al logo.
+
+## Características
+
+- **Icono de flecha**: Apunta hacia la izquierda
+- **Funcionalidad**: Usa `window.history.back()` para volver a la página anterior
+- **Diseño**: Combina con el estilo de la aplicación (Flowbite/Tailwind)
+- **Responsive**: Se adapta a dispositivos móviles
+- **Hover effect**: Cambia de color al pasar el mouse
+
+## Componente Reutilizable
+
+También se creó un componente reutilizable que puedes usar en cualquier vista:
+
+### Uso del componente `<x-back-button>`
+
+```blade
+<!-- Botón simple que vuelve a la página anterior -->
+<x-back-button />
+
+<!-- Botón con texto personalizado -->
+<x-back-button text="Regresar" />
+
+<!-- Botón con URL específica -->
+<x-back-button url="{{ route('docentes.index') }}" text="Volver a Docentes" />
+
+<!-- Botón con clases personalizadas -->
+<x-back-button class="mt-4 mb-2" />
+```
+
+## Ejemplos de Uso
+
+### En una vista Blade:
+
+```blade
+<x-layouts.app :title="__('Mi Página')">
+    <!-- El botón ya está en el navbar automáticamente -->
+    
+    <!-- O puedes agregar uno adicional en el contenido -->
+    <div class="mb-4">
+        <x-back-button />
+    </div>
+    
+    <div class="content">
+        <!-- Tu contenido aquí -->
+    </div>
+</x-layouts.app>
+```
+
+### Botón con URL específica:
+
+```blade
+<x-back-button 
+    url="{{ route('administrador.dashboard') }}" 
+    text="Volver al Dashboard" 
+/>
+```
+
+## Personalización
+
+Si necesitas cambiar el estilo del botón en el navbar, edita:
+`resources/views/components/layouts/app/nav.blade.php`
+
+Si necesitas cambiar el componente reutilizable, edita:
+`resources/views/components/back-button.blade.php`
+
+## Notas
+
+- El botón en el navbar está siempre visible en todas las páginas que usan el layout `app`
+- Las páginas de login ya tienen sus propios botones de regreso personalizados
+- El logo también funciona como enlace al dashboard correspondiente según el rol del usuario
+

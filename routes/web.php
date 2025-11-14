@@ -31,15 +31,15 @@ Route::get('/account-selector', function () {
 // Rutas de login por tipo de cuenta
 Route::get('/login/estudiante', function () {
     return view('auth.login-estudiante');
-})->name('login.estudiante');
+})->middleware(\App\Http\Middleware\PreventBackHistory::class)->name('login.estudiante');
 
 Route::get('/login/docente', function () {
     return view('auth.login-docente');
-})->name('login.docente');
+})->middleware(\App\Http\Middleware\PreventBackHistory::class)->name('login.docente');
 
 Route::get('/login/administrativo', function () {
     return view('auth.login-administrativo');
-})->name('login.administrativo');
+})->middleware(\App\Http\Middleware\PreventBackHistory::class)->name('login.administrativo');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -122,8 +122,15 @@ Route::middleware(['auth'])->group( function () {
     Route::get('/reportes/materias/excel', [ReporteController::class, 'materiasExcel'])->name('reportes.materias.excel');
     Route::get('/reportes/materias/pdf', [ReporteController::class, 'materiasPdf'])->name('reportes.materias.pdf');
 
-    // Reportes dinámicos
-    Route::get('/reportes/dinamicos', [ReporteController::class, 'dinamicos'])->name('reportes.dinamicos');
+    // Reportes dinámicos (ahora en index)
+    Route::get('/reportes/exportar-dinamico', [ReporteController::class, 'exportarDinamico'])->name('reportes.exportar-dinamico');
+    Route::get('/reportes/exportar-dinamico-excel', [ReporteController::class, 'exportarDinamicoExcel'])->name('reportes.exportar-dinamico-excel');
+    
+    // Reportes automáticos
+    Route::get('/reportes/automatico/horario-semanal', [\App\Http\Controllers\ReporteAutomaticoController::class, 'horarioSemanal'])->name('reportes.automatico.horario-semanal');
+    Route::get('/reportes/automatico/ausencias-docente', [\App\Http\Controllers\ReporteAutomaticoController::class, 'ausenciasDocente'])->name('reportes.automatico.ausencias-docente');
+    Route::get('/reportes/automatico/aulas-disponibles', [\App\Http\Controllers\ReporteAutomaticoController::class, 'aulasDisponibles'])->name('reportes.automatico.aulas-disponibles');
+    
     Route::resource('reportes', ReporteController::class);
 
 });
