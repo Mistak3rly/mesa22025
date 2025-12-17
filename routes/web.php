@@ -60,6 +60,7 @@ Route::middleware(['auth'])->group( function () {
 
     //Rutas para el modulo docente
     Route::get('dashboard-docente', [DocenteController::class, 'dashboard'])->name('docente.dashboard');
+    Route::get('docentes/mi-horario', [DocenteController::class, 'miHorario'])->name('docentes.mi-horario');
     Route::get('docentes/deletedIndex', [DocenteController::class, 'deletedIndex'])->name('docentes.deleted-index');
     Route::patch('docentes/reactivate/{id}', [DocenteController::class, 'reactivate'])->name('docentes.reactivar');
     Route::post('docentes/assign', [DocenteController::class, 'assign'])->name('docentes.asignar-materia');
@@ -106,6 +107,12 @@ Route::middleware(['auth'])->group( function () {
     Route::resource('semestres', SemestreController::class);
 
     //Rutas para modulo horarios
+    Route::get('horarios/asignacion-automatica', [HorarioController::class, 'asignacionAutomatica'])->name('horarios.asignacion-automatica');
+    Route::post('horarios/procesar-asignacion-automatica', [HorarioController::class, 'procesarAsignacionAutomatica'])->name('horarios.procesar-asignacion-automatica');
+    Route::get('horarios/simulador', [HorarioController::class, 'simulador'])->name('horarios.simulador');
+    Route::post('horarios/procesar-simulacion', [HorarioController::class, 'procesarSimulacion'])->name('horarios.procesar-simulacion');
+    Route::post('horarios/aplicar-simulacion', [HorarioController::class, 'aplicarSimulacion'])->name('horarios.aplicar-simulacion');
+    Route::get('horarios/ver-docente/{docente_id}', [HorarioController::class, 'verHorarioDocente'])->name('horarios.ver-docente');
     Route::get('horarios/deletedIndex', [HorarioController::class, 'deletedIndex'])->name('horarios.deleted-index');
     Route::patch('horarios/reactivate/{id}', [HorarioController::class, 'reactivate'])->name('horarios.reactivar');
     Route::resource('horarios', HorarioController::class);

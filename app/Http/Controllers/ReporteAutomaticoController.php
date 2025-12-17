@@ -56,8 +56,9 @@ class ReporteAutomaticoController extends Controller
             ->whereHas('horario', function($q) use ($asignaturasDocente) {
                 $q->whereIn('asignatura_id', $asignaturasDocente);
             })
-            ->whereBetween('fecha', [$fechaInicio, $fechaFin])
-            ->orderBy('fecha', 'desc')
+            ->whereDate('fecha_hora', '>=', $fechaInicio)
+            ->whereDate('fecha_hora', '<=', $fechaFin)
+            ->orderBy('fecha_hora', 'desc')
             ->get();
 
         // Calcular estadísticas

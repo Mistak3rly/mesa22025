@@ -3,6 +3,44 @@
 
         <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Crear Horario y Asignar Docente</h2>
 
+        <!-- Alertas de conflictos -->
+        @if($errors->has('conflictos'))
+            <div class="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-lg">
+                <div class="flex items-center mb-3">
+                    <svg class="w-6 h-6 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    <h3 class="text-lg font-semibold text-red-800 dark:text-red-200">⚠️ Conflictos de Horarios Detectados</h3>
+                </div>
+                <div class="space-y-2">
+                    @foreach($errors->get('conflictos') as $conflictos)
+                        @foreach($conflictos as $conflicto)
+                            <p class="text-sm text-red-700 dark:text-red-300 bg-red-100 dark:bg-red-800/30 p-3 rounded-md border border-red-200 dark:border-red-700">
+                                {{ $conflicto }}
+                            </p>
+                        @endforeach
+                    @endforeach
+                </div>
+                <div class="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-md">
+                    <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                        <strong>💡 Sugerencia:</strong> Revisa los horarios existentes y selecciona una hora o aula diferente para evitar conflictos.
+                    </p>
+                </div>
+            </div>
+        @endif
+
+        <!-- Mensaje de advertencia general -->
+        @if(session('warning'))
+            <div class="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-500 rounded-lg">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    <p class="text-yellow-800 dark:text-yellow-200 font-medium">{{ session('warning') }}</p>
+                </div>
+            </div>
+        @endif
+
         <form action="{{ route('horarios.store') }}" method="POST" class="space-y-6">
             @csrf
 
@@ -158,8 +196,50 @@
             // Inicializar si ya hay una opción seleccionada
             selectInicio.dispatchEvent(new Event('change'));
 
-            let varaible = @json($horas);
-            console.log(varaible);
+            // Agregar validación visual de conflictos
+            const form = document.querySelector('form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            function mostrarAdvertencia(mensaje) {
+                // Remover advertencias previas
+                const advertenciaPrevia = document.querySelector('.advertencia-conflicto');
+                if (advertenciaPrevia) {
+                    advertenciaPrevia.remove();
+                }
+                
+                // Crear nueva advertencia
+                const advertencia = document.createElement('div');
+                advertencia.className = 'advertencia-conflicto mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg';
+                advertencia.innerHTML = `
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01"/>
+                        </svg>
+                        <p class="text-yellow-800 dark:text-yellow-200 text-sm">${mensaje}</p>
+                    </div>
+                `;
+                
+                // Insertar antes del formulario
+                form.parentNode.insertBefore(advertencia, form);
+            }
+            
+            function validarSeleccion() {
+                const diasSeleccionados = document.querySelectorAll('input[name="dia_id[]"]:checked');
+                const horaSeleccionada = selectInicio.value;
+                const aulaSeleccionada = document.getElementById('aula_id').value;
+                
+                if (diasSeleccionados.length > 0 && horaSeleccionada && aulaSeleccionada) {
+                    mostrarAdvertencia('⚠️ Asegúrate de que no haya conflictos de horarios. El sistema validará automáticamente al guardar.');
+                }
+            }
+            
+            // Agregar listeners para validación en tiempo real
+            document.querySelectorAll('input[name="dia_id[]"]').forEach(checkbox => {
+                checkbox.addEventListener('change', validarSeleccion);
+            });
+            
+            selectInicio.addEventListener('change', validarSeleccion);
+            document.getElementById('aula_id').addEventListener('change', validarSeleccion);
             
         });
     </script>

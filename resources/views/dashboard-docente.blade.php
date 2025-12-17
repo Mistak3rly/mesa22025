@@ -27,25 +27,33 @@
         </div>
 
         <!-- Tarjetas rápidas -->
-        <div class="grid gap-6 md:grid-cols-3">
+        <div class="grid gap-6 md:grid-cols-4">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Asignaturas asignadas</p>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ \App\Models\GrupoAsignatura::where('docente_id', Auth::id())->count() }}
+                    {{ \App\Models\GrupoAsignatura::where('docente_id', Auth::user()->persona->docente->id)->count() }}
                 </p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Grupos</p>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ \App\Models\GrupoAsignatura::where('docente_id', Auth::id())->distinct('grupo_id')->count('grupo_id') }}
+                    {{ \App\Models\GrupoAsignatura::where('docente_id', Auth::user()->persona->docente->id)->distinct('grupo_id')->count('grupo_id') }}
                 </p>
             </div>
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Aulas</p>
                 <p class="text-2xl font-bold text-gray-900 dark:text-white">
-                    {{ \App\Models\Horario::whereHas('docentes', fn($q) => $q->where('docente_id', Auth::id()))->distinct('aula_id')->count('aula_id') }}
+                    {{ \App\Models\Horario::whereHas('docentes', fn($q) => $q->where('docente_id', Auth::user()->persona->docente->id))->distinct('aula_id')->count('aula_id') }}
                 </p>
             </div>
+            <a href="{{ route('docentes.mi-horario') }}" class="bg-gradient-to-r from-green-500 to-green-600 rounded-xl shadow-md p-6 hover:shadow-lg transition flex items-center justify-center">
+                <div class="text-center text-white">
+                    <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <p class="font-semibold">Ver Mi Horario</p>
+                </div>
+            </a>
         </div>
 
         <!-- Calendario de horarios -->

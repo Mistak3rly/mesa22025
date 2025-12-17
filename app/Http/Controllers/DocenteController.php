@@ -330,29 +330,8 @@ class DocenteController extends Controller
 
     public function dashboard()
     {
-        $docente = Auth::user()->persona->docente;
-        $semestre = Semestre::where('estado', true)->firstOrFail();
-
-        $horarios = $docente->horarios()
-            ->with(['asignatura', 'aula', 'dia', 'hora'])
-            ->get()
-            ->map(function($h) use ($semestre) {
-                return [
-                    'id'          => $h->id,
-                    'title'       => $h->asignatura->descripcion . ' - Aula ' . $h->aula->numero_aula,
-                    'dia_semana'  => strtolower($h->dia->descripcion),
-                    'hora_inicio' => $h->hora->hora_inicio->format('H:i'),
-                    'hora_fin'    => $h->hora->hora_fin->format('H:i'),
-                    'semestre_inicio' => $semestre->fecha_inicio,
-                    'semestre_fin'    => $semestre->fecha_fin,
-                ];
-            });
-
-        /* $imp = (string) $horarios;
-        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-        $out->writeln($imp); */
-        
-        return view('dashboard-docente', compact('horarios'));
+        // Redirigir directamente a la vista de horario del docente
+        return redirect()->route('docentes.mi-horario');
     }
 
     public function asistencia(Request $request)
@@ -365,10 +344,34 @@ class DocenteController extends Controller
         Asistencia::create([
             'horario_id' => $request->horario_id,
             'estado'     => $request->estado,
-            'fecha'      => now()->toDateString()
+            'fecha_hora' => now()->toDateTimeString()
         ]);
 
         return back()->with('success', 'Asistencia registrada correctamente.');
+    }
+
+    public function miHorario()
+    {
+        $docente = Auth::user()->persona->docente;
+        $semestre = Semestre::where('estado', true)->firstOrFail();
+
+        $horarios = $docente->horarios()
+            ->with(['asignatura', 'aula', 'dia', 'hora'])
+            ->where('semestre_id', $semestre->id)
+            ->get()
+            ->map(function($h) use ($semestre) {
+                return [
+                    'id'          => $h->id,
+                    'title'       => $h->asignatura->descripcion . ' - Aula ' . $h->aula->numero_aula,
+                    'dia_semana'  => strtolower($h->dia->descripcion),
+                    'hora_inicio' => $h->hora->hora_inicio->format('H:i'),
+                    'hora_fin'    => $h->hora->hora_fin->format('H:i'),
+                    'semestre_inicio' => $semestre->fecha_inicio,
+                    'semestre_fin'    => $semestre->fecha_fin,
+                ];
+            });
+        
+        return view('application.docente.panel', compact('horarios'));
     }
 
 }

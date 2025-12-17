@@ -13,7 +13,8 @@ class Asistencia extends Model
     protected $fillable = [ 
         'horario_id', 
         'fecha_hora',
-        'estado'
+        'estado',
+        'observacion'
     ];
 
     // Relación con Horario

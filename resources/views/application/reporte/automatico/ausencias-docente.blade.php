@@ -90,7 +90,7 @@
                             @foreach($asistencias as $asistencia)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ date('d/m/Y', strtotime($asistencia->fecha)) }}
+                                        {{ date('d/m/Y', strtotime($asistencia->fecha_hora)) }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900">
                                         {{ $asistencia->horario->asignatura->descripcion }}
